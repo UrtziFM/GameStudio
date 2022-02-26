@@ -99,7 +99,7 @@ function render() {
 
 // control the user paddles
 function movePaddle(evt) {
-    let rect = evt.getBoundingClientRect();
+    let rect = cvs.getBoundingClientRect();
 
     user.y = evt.clientY - rect.top - user.height/2;
 }
@@ -123,6 +123,11 @@ function colission(ball, player){
 function update() {
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
+
+    // Simple AI to control the computer paddle
+    let computerLevel = 0.1;
+    computer.y += (ball.y - (computer.y + computer.height/2))*computerLevel;
+
 
     if(ball.y + ball.radius > cvs.height || ball.y - ball.radius < 0){
         ball.velocityY = -ball.velocityY;
