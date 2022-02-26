@@ -7,21 +7,21 @@ const ctx = cvs.getContext("2d");
 const user = {
     x: 0,
     y: cvs.height/2 - 100/2,
-    width = 10,
-    height = 100,
-    color = "WHITE",
-    score = 0
+    width: 10,
+    height: 100,
+    color: "WHITE",
+    score: 0
 }
 
 // Create the computer padle
 
 const computer = {
-    x: cvs.width -  10,
+    x: cvs.width - 10,
     y: cvs.height/2 - 100/2,
-    width = 10,
-    height = 100,
-    color = "WHITE",
-    score = 0
+    width: 10,
+    height: 100,
+    color: "WHITE",
+    score: 0
 }
 
 // Create the  ball
@@ -97,10 +97,15 @@ function render() {
     drawCircle(ball.x, ball.y, ball.radius, ball.color);
 }
 
+// update: position, move, score...
+function update() {
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
+}
 // Game init function
-
-function gameInit() {
+function game() {
     render();
+    update();
 }
 
 // Loop 
