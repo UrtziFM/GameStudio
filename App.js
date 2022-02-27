@@ -106,7 +106,7 @@ function movePaddle(evt) {
 cvs.addEventListener("mousemove", movePaddle);
 
 // colission detection
-function colission(ball, player){
+function collision(ball, player){
     ball.top = ball.y - ball.radius;
     ball.down = ball.y + ball.radius;
     ball.right = ball.x + ball.radius;
@@ -119,6 +119,16 @@ function colission(ball, player){
 
     return ball.right > player.left && ball.bottom > player.top && ball.left < player.right && ball.top < player.bottom;
 }
+
+// resetBall function
+function resetBall() {
+    ball.x = cvs.width/2;
+    ball.y = cvs.height/2;
+
+    ball.speed = 5;
+    ball.velocityX = -ball.velocityX;
+}
+
 // update: position, move, score...
 function update() {
     ball.x += ball.velocityX;
@@ -136,7 +146,30 @@ function update() {
     let player = (ball.x < cvs.width/2) ? user : computer;
 
     if(collision(ball, player)){
+        // where the ball hit the player
+        let collidePoint = ball.y - (player.y + player.height/2);
+        // normalization 
+        collidePoint = collidePoint/(player.height/2);
+        // calculate angle in Radians 
+        let angleRad = collidePoint * Math.PI/4;
+        // X direction of the ball its hit 
+        let direction = (ball.x < cvs.width/2) ? 1 : -1;
 
+        //change velocity X and Y 
+        ball.velocityX = direction * ball.speed * Math.cos(angleRad);
+        ball.velocityY = direction * ball.speed * Math.sin(angleRad);
+        // every time the ball hit the paddle increase its speed
+        ball.speed += 0.5;
+    }
+    // update the score
+    if(ball.x - ball.radius < 0){
+        // the computer win
+        computer.score++;
+        resetBall();
+    }else if(ball.x + ball.radius > cvs.width){
+        // the user win
+        user.score++;
+        resetBall();
     }
 }
 // Game init function
