@@ -5,8 +5,8 @@ const ctx = cvs.getContext("2d");
 // Create the user padle
 
 const user = {
-    x: 0,
-    y: cvs.height/2 - 100/2,
+    x: 0, //left side of canvas
+    y: (cvs.height - 100)/2,
     width: 10,
     height: 100,
     color: "WHITE",
@@ -16,8 +16,8 @@ const user = {
 // Create the computer padle
 
 const computer = {
-    x: cvs.width - 10,
-    y: cvs.height/2 - 100/2,
+    x: cvs.width - 10, //right side of canvas
+    y: (cvs.height - 100)/2,
     width: 10,
     height: 100,
     color: "WHITE",
@@ -38,32 +38,32 @@ const ball = {
 
 // Create the net
 const net = {
-    x: cvs.width/2 -1,
+    x: (cvs.width - 2)/2, //in the middle of canvas
     y: 0,
     width: 2,
     height: 10,
     color: "WHITE"
 }
 
-// Draw the net function
+// Draw the net function to draw the net
 function drawNet(){
     for (let i =0; i <=cvs.height; i+=15){
         drawRect(net.x, net.y + i, net.width, net.height, net.color);
     }
 }
 
-// Draw rect function
+// Draw rect function to draw paddles
 function drawRect(x,y,w,h,color) {
     ctx.fillStyle = color;
     ctx.fillRect(x,y,w,h);
 }
 
-// Draw circle function
+// Draw circle function to draw ball
 
 function drawCircle(x,y,r,color) {
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(x,y,r,0,Math.PI*2,false);
+    ctx.arc(x,y,r,0,Math.PI*2,true);
     ctx.closePath();
     ctx.fill();
 }
@@ -72,7 +72,7 @@ function drawCircle(x,y,r,color) {
 
 function drawText(text,x,y,color) {
     ctx.fillStyle = color;
-    ctx.font = "45px fantasy";
+    ctx.font = "75px fantasy";
     ctx.fillText(text,x,y);
 }
 
@@ -108,7 +108,7 @@ cvs.addEventListener("mousemove", movePaddle);
 // colission detection
 function collision(ball, player){
     ball.top = ball.y - ball.radius;
-    ball.down = ball.y + ball.radius;
+    ball.bottom = ball.y + ball.radius;
     ball.right = ball.x + ball.radius;
     ball.left = ball.x - ball.radius;
 
@@ -131,6 +131,19 @@ function resetBall() {
 
 // update: position, move, score...
 function update() {
+
+    // update the score
+    if(ball.x - ball.radius < 0){
+    // the computer win
+        computer.score++;
+        resetBall();
+    }else if(ball.x + ball.radius > cvs.width){
+    // the user win
+        user.score++;
+        resetBall();
+    }
+
+    // the ball has a velocity
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
 
@@ -143,7 +156,7 @@ function update() {
         ball.velocityY = -ball.velocityY;
     }
 
-    let player = (ball.x < cvs.width/2) ? user : computer;
+    let player = (ball.x + ball.radius < cvs.width/2) ? user : computer;
 
     if(collision(ball, player)){
         // where the ball hit the player
@@ -151,26 +164,17 @@ function update() {
         // normalization 
         collidePoint = collidePoint/(player.height/2);
         // calculate angle in Radians 
-        let angleRad = collidePoint * Math.PI/4;
+        let angleRad = collidePoint * (Math.PI/4);
         // X direction of the ball its hit 
-        let direction = (ball.x < cvs.width/2) ? 1 : -1;
+        let direction = (ball.x + ball.radius < cvs.width/2) ? 1 : -1;
 
         //change velocity X and Y 
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
         ball.velocityY = direction * ball.speed * Math.sin(angleRad);
         // every time the ball hit the paddle increase its speed
-        ball.speed += 0.5;
+        ball.speed += 0.3;
     }
-    // update the score
-    if(ball.x - ball.radius < 0){
-        // the computer win
-        computer.score++;
-        resetBall();
-    }else if(ball.x + ball.radius > cvs.width){
-        // the user win
-        user.score++;
-        resetBall();
-    }
+
 }
 // Game init function
 function game() {
@@ -178,6 +182,8 @@ function game() {
     update();
 }
 
-// Loop 
-const framePerSecond = 50;
-setInterval(game, 1000/framePerSecond);
+// Number of frames per second
+let framePerSecond = 50;
+
+// call the funcyion 50 times every 1 sec
+let loop = setInterval(game, 1000/framePerSecond);
