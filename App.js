@@ -3,6 +3,7 @@
 const cvs = document.getElementById("pong");
 const ctx = cvs.getContext("2d");
 
+
 // Create the user padle
 
 const user = {
