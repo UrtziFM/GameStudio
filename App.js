@@ -1,4 +1,5 @@
 // Select Canvas
+
 const cvs = document.getElementById("pong");
 const ctx = cvs.getContext("2d");
 
@@ -177,7 +178,7 @@ function update() {
 
 }
 // Game init function
-function game() {
+function gameOn() {
     render();
     update();
 }
@@ -186,4 +187,4 @@ function game() {
 let framePerSecond = 50;
 
 // call the funcyion 50 times every 1 sec
-let loop = setInterval(game, 1000/framePerSecond);
+let loop = setInterval(gameOn, 1000/framePerSecond);
