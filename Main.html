@@ -3,11 +3,23 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PingPong Game</title>
+        <title>Pong Game</title>
+        <script src="Gui.js" charset="utf-8"></script>
+        <script src="App.js" charset="utf-8"></script>
         <link rel="stylesheet" href="Styles.css"> 
     </head>
     <body>
-        <canvas id="pong" width="600px" height="400px"></canvas>
-        <script src="App.js" charset="utf-8"></script>
+        <canvas id="canvas" style="display: none"></canvas>
+        <div id="load" class="screen" style="display: block">
+            Loading, please wait...
+        </div>
+        <div id="start" class="screen" style="display: none">
+            <img src="assets/gameOnPong.png"/>
+            <button onclick="">Let's play Bro</button>
+        </div>
+        <div id="end" class="screen" style="display: none">
+            <img src="assets/gameOverPong.jpeg"/>
+            <button onclick="">Let's play again!</button>
+        </div>
     </body>
 </html>

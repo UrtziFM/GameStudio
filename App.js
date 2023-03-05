@@ -1,3 +1,15 @@
+// Calling to class Gui
+window.gui = new Gui();
+
+window.onload = function() {
+    console.log("loading ...");
+}
+
+window.onresize = function(){
+    console.log("resizing...");
+    window.gui.resize();
+}
+
 // Select Canvas
 
 const cvs = document.getElementById("pong");
