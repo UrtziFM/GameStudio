@@ -40,5 +40,48 @@ class Gui {
         this.toggleScreen(id, true);
    }
 
+   launchIfReady() {
+    this.resourcesToLoad--;
+    if (this.resourcesToLoad == 0){
+        this.prepareCanvas();
+        this.showScreen("start");
+        }
+    }
+
+    beginLoadingImage(imgVar, fileName){
+        imgVar.onload = () => this.launchIfReady();
+        imgVar.src = fileName;
+    }
+
+    load(resources) {
+        if(!resources || resources.length == 0){
+            this.prepareCanvas();
+            this.showScreen("start");
+            return;
+        }
+
+        if(resources) {
+            this.resources = resources;
+            this.resourcesToLoad = this.resources.length;
+
+            for(let i = 0; i < this.resources.length; i++)
+                if(this.resources[i].var != undefined) {
+                    if(this.resources[i].var.nodeName == "IMG"){
+                        this.beginLoadingImage(
+                            this.resources[i].var,
+                            this.resources[i].file);
+                    }
+                    
+                }
+            }
+        }
+
+    getResource(id){
+        return this.resources.filter(r => r.id === id)[0].var;
+        }
+    
+    getResources(){
+        return this.resources;
+        }
 
 }
