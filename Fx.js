@@ -99,6 +99,8 @@ class Fx {
     }
 
     collision(ball, player){
+        ball = this.ball;
+        player = this.player;
         this.ball.top = this.ball.y - this.ball.radius;
         this.ball.bottom = this.ball.y + this.ball.radius;
         this.ball.right = this.ball.x + this.ball.radius;
@@ -126,11 +128,11 @@ class Fx {
         if(this.ball.x - this.ball.radius < 0){
         // the computer win
             this.computer.score++;
-            this.fx.resetBall();
+            this.resetBall();
         }else if(this.ball.x + this.ball.radius > this.cnv.width){
         // the user win
             this.user.score++;
-            this.fx.resetBall();
+            this.resetBall();
         }
     
         // the ball has a velocity
@@ -147,7 +149,8 @@ class Fx {
         }
 
     
-        if(this.fx.collision(ball, player)){
+        if(this.collision()){
+
             // where the ball hit the player
             this.collidePoint = this.ball.y - (this.player.y + this.player.height/2);
             // normalization 
