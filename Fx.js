@@ -7,6 +7,7 @@ class Fx {
         this.computer = null;
         this.net = null;
         this.ball = null;
+        this.player = null;
     }
 
     init(){
@@ -44,6 +45,7 @@ class Fx {
             velocityY: 5,
             color: "WHITE"
         }
+        this.player = (this.ball.x + this.ball.radius < this.cnv.width/2) ? this.user : this.computer;
     }
 
     fillCanvas(color){
@@ -96,13 +98,70 @@ class Fx {
         }
     }
 
-    rotateAndDrawImage(image, atx, aty, angle){
-        if(image && this.ctx){
-            this.ctx.save();
-            this.ctx.translate(atx+image.width/2, aty+image.height/2);
-            this.ctx.rotate(angle);
-            this.ctx.drawImage(image, -image.width/2, image.height/2);
-            this.ctx.restore();
+    collision(ball, player){
+        this.ball.top = this.ball.y - this.ball.radius;
+        this.ball.bottom = this.ball.y + this.ball.radius;
+        this.ball.right = this.ball.x + this.ball.radius;
+        this.ball.left = this.ball.x - this.ball.radius;
+    
+        this.player.top = this.player.y;
+        this.player.bottom = this.player.y + this.player.height;
+        this.player.left = this.player.x;
+        this.player.right = this.player.x + this.player.width;
+    
+        return this.ball.right > this.player.left && this.ball.bottom > this.player.top && this.ball.left < 
+        this.player.right && this.ball.top < this.player.bottom;
+    }
+
+    resetBall() {
+        this.ball.x = this.cnv.width/2;
+        this.ball.y = this.cnv.height/2;
+    
+        this.ball.speed = 5;
+        this.ball.velocityX = -this.ball.velocityX;
+    }
+
+    updateGame(){   
+        // update the score
+        if(this.ball.x - this.ball.radius < 0){
+        // the computer win
+            this.computer.score++;
+            this.fx.resetBall();
+        }else if(this.ball.x + this.ball.radius > this.cnv.width){
+        // the user win
+            this.user.score++;
+            this.fx.resetBall();
+        }
+    
+        // the ball has a velocity
+        this.ball.x += this.ball.velocityX;
+        this.ball.y += this.ball.velocityY;
+    
+        // Simple AI to control the computer paddle
+        this.computerLevel = 0.1;
+        this.computer.y += (this.ball.y - (this.computer.y + this.computer.height/2))*this.computerLevel;
+    
+    
+        if(this.ball.y + this.ball.radius > this.cnv.height || this.ball.y - this.ball.radius < 0){
+            this.ball.velocityY = -this.ball.velocityY;
+        }
+
+    
+        if(this.fx.collision(ball, player)){
+            // where the ball hit the player
+            this.collidePoint = this.ball.y - (this.player.y + this.player.height/2);
+            // normalization 
+            this.collidePoint = this.collidePoint/(this.player.height/2);
+            // calculate angle in Radians 
+            this.angleRad = this.collidePoint * (Math.PI/4);
+            // X direction of the ball its hit 
+            this.direction = (this.ball.x + this.ball.radius < this.cnv.width/2) ? 1 : -1;
+    
+            //change velocity X and Y 
+            this.ball.velocityX = this.direction * this.ball.speed * Math.cos(this.angleRad);
+            this.ball.velocityY = this.direction * this.ball.speed * Math.sin(this.angleRad);
+            // every time the ball hit the paddle increase its speed
+            this.ball.speed += 0.3;
         }
     }
 }
