@@ -92,7 +92,7 @@ class Fx {
 
     userScore(){
         this.drawText(this.user.score,this.cnv.width/3,this.cnv.height/8, "WHITE");
-        if(this.user.score == 1){
+        if(this.user.score == 3){
             window.gui.winGame();
             return;
         }
@@ -100,7 +100,7 @@ class Fx {
 
     computerScore(){
         this.drawText(this.computer.score,1.85*this.cnv.width/3,this.cnv.height/8, "WHITE");
-        if(this.computer.score == 5){
+        if(this.computer.score == 3){
             window.gui.stopGame();
             return;
         }
