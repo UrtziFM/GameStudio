@@ -46,14 +46,6 @@ class Fx {
             velocityY: 5,
             color: "WHITE"
         }
-        if(this.ball.x + this.ball.radius < this.cnv.width/2) {
-            console.log("user")
-            this.player = this.user;
-        } else {
-            this.player = this.computer;
-            console.log("computer")
-            //? this.user : this.computer;
-    }
 }
 
     fillCanvas(color){
@@ -100,10 +92,18 @@ class Fx {
 
     userScore(){
         this.drawText(this.user.score,this.cnv.width/3,this.cnv.height/8, "WHITE");
+        if(this.user.score == 1){
+            window.gui.winGame();
+            return;
+        }
     }
 
     computerScore(){
         this.drawText(this.computer.score,1.85*this.cnv.width/3,this.cnv.height/8, "WHITE");
+        if(this.computer.score == 5){
+            window.gui.stopGame();
+            return;
+        }
     }
 
     drawNet(){
@@ -115,6 +115,13 @@ class Fx {
     collision(ball, player){
         ball = this.ball;
         player = this.player;
+        if(this.ball.x + this.ball.radius < this.cnv.width/2) {
+            console.log("user")
+            this.player = this.user;
+        } else {
+            this.player = this.computer;
+            console.log("computer")
+    }
         this.ball.top = this.ball.y - this.ball.radius;
         this.ball.bottom = this.ball.y + this.ball.radius;
         this.ball.right = this.ball.x + this.ball.radius;
