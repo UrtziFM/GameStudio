@@ -13,6 +13,7 @@ class Fx {
     init(){
         this.cnv = document.getElementById("canvas");
         this.ctx = this.cnv.getContext("2d");
+        window.addEventListener("mousemove", (e)=> {this.movePaddle(e)});
         this.user = {
             x: 0, //left side of canvas
             y: (this.cnv.height - 100)/2,
@@ -45,8 +46,15 @@ class Fx {
             velocityY: 5,
             color: "WHITE"
         }
-        this.player = (this.ball.x + this.ball.radius < this.cnv.width/2) ? this.user : this.computer;
+        if(this.ball.x + this.ball.radius < this.cnv.width/2) {
+            console.log("user")
+            this.player = this.user;
+        } else {
+            this.player = this.computer;
+            console.log("computer")
+            //? this.user : this.computer;
     }
+}
 
     fillCanvas(color){
         this.drawRect(0, 0, this.cnv.width, this.cnv.height, color);
@@ -60,6 +68,12 @@ class Fx {
 
     userPaddle(){
         this.drawRect(this.user.x, this.user.y, this.user.width, this.user.height, this.user.color);
+    }
+
+    movePaddle(e) {
+        this.rect = this.cnv.getBoundingClientRect();
+    
+        this.user.y = e.clientY - this.rect.top - this.user.height/2;
     }
 
     computerPaddle(){
