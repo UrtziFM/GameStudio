@@ -13,7 +13,7 @@ class Game {
     }
 
     update() {
-        console.log("game update");
+        this.fx.updateGame();
     }
 
     render() {
