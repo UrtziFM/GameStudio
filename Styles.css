@@ -11,7 +11,7 @@ button  {
     border: none;
     border: collapse;
     border-radius: 8px;
-    margin-top: 60px;
+    margin-top: 80px;
     padding: 10px;
     color: #fff;
     background-color: #2ecc71;
@@ -28,6 +28,10 @@ button:hover  {
     background-color: #3498db;
 }
 
+.startScreen {
+    text-align: center;
+    font-size: 0.9em;
+}
 
 .screen {
     position: absolute;
