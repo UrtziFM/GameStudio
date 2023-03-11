@@ -4,10 +4,16 @@ class Fx {
         this.cnv = null;
         this.ctx = null;
         this.user = null;
-        this.computer = null;
-        this.net = null;
         this.ball = null;
-        this.player = null;
+        this.brickRowCount = null;
+        this.brickColumnCount = null;
+        this.brickWidth = null;
+        this.brickHeight = null;
+        this.brickPadding = null;
+        this.brickOffsetTop = null;
+        this.brickOffsetLeft = null;
+        this.bricks = [];
+        this.score = null;
     }
 
     init(){
@@ -15,37 +21,38 @@ class Fx {
         this.ctx = this.cnv.getContext("2d");
         window.addEventListener("mousemove", (e)=> {this.movePaddle(e)});
         this.user = {
-            x: 0, //left side of canvas
-            y: (this.cnv.height - 100)/2,
-            width: 15,
-            height: 100,
-            color: "WHITE",
-            score: 0
-        }
-        this.computer = {
-            x: this.cnv.width - 15, //right side of canvas
-            y: (this.cnv.height - 100)/2,
-            width: 15,
-            height: 100,
-            color: "WHITE",
-            score: 0
-        }
-        this.net = {
-            x: (this.cnv.width - 2)/2, //in the middle of canvas
-            y: 0,
-            width: 2,
+            x: (cvs.width - 60)/2, //in the middle of the screen
+            y: cvs.height - 30, // on the bottom of the screen
+            width: 60,
             height: 10,
-            color: "WHITE"
+            color: "WHITE",
+            score: 0
         }
         this.ball = {
-            x: this.cnv.width/2,
-            y: this.cnv.height/2,
-            radius: 15,
+            x: cvs.width/2,
+            y: cvs.height/2,
+            radius: 6,
             speed: 5,
             velocityX: 5,
             velocityY: 5,
             color: "WHITE"
         }
+        this.brickRowCount = 4;
+        this.brickColumnCount = 10;
+        this.brickWidth = 50;
+        this.brickHeight = 20;
+        this.brickPadding = 5;
+        this.brickOffsetTop = 15;
+        this.brickOffsetLeft = 25;
+        // The matrix for bricks
+        this.bricks = [];
+        for(c=0; c<brickColumnCount; c++) {
+            bricks[c] = [];
+            for(r=0; r<brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+        this.score = 0;
 }
 
     fillCanvas(color){
@@ -65,11 +72,7 @@ class Fx {
     movePaddle(e) {
         this.rect = this.cnv.getBoundingClientRect();
     
-        this.user.y = e.clientY - this.rect.top - this.user.height/2;
-    }
-
-    computerPaddle(){
-        this.drawRect(this.computer.x, this.computer.y, this.computer.width, this.computer.height, this.computer.color);
+        this.user.x = e.clientX - this.rect.top - this.user.width/2;
     }
 
     drawCircle(x,y,r,color) {
@@ -84,65 +87,52 @@ class Fx {
         this.drawCircle(this.ball.x, this.ball.y, this.ball.radius, this.ball.color);
     }
 
-    drawText(text,x,y,color) {
-        this.ctx.fillStyle = color;
-        this.ctx.font = "100px fantasy";
-        this.ctx.fillText(text,x,y);
-    }
-
     userScore(){
-        this.drawText(this.user.score,this.cnv.width/3,this.cnv.height/8, "WHITE");
+        this.ctx.font = "16px Arial";
+        this.ctx.fillStyle = "WHITE";
+        this.ctx.fillText("Score: "+this.score, 2, 395);
         if(this.user.score == 3){
             window.gui.winGame();
             return;
         }
     }
 
-    computerScore(){
-        this.drawText(this.computer.score,1.85*this.cnv.width/3,this.cnv.height/8, "WHITE");
-        if(this.computer.score == 3){
-            window.gui.stopGame();
-            return;
+    // Draw the bricks (C: Col R: Row )
+    drawBricks() {
+        for(c=0; c<this.brickColumnCount; c++) {
+            for(r=0; r<this.brickRowCount; r++) {
+                if(this.bricks[c][r].status == 1) {
+                    this.brickX = (c*(this.brickWidth+this.brickPadding))+this.brickOffsetLeft;
+                    this.brickY = (r*(this.brickHeight+this.brickPadding))+this.brickOffsetTop;
+                    this.bricks[c][r].x = this.brickX;
+                    this.bricks[c][r].y = this.brickY;
+                    this.ctx.beginPath();
+                    this.ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
+                    this.ctx.fillStyle = "WHITE";
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+            }
         }
     }
 
-    drawNet(){
-        for (let i =0; i <=this.cnv.height; i+=15){
-            this.drawRect(this.net.x, this.net.y + i, this.net.width, this.net.height, this.net.color);
-        }
-    }
-
-    collision(ball, player){
+    collision(ball, user){
         ball = this.ball;
-        player = this.player;
-        if(this.ball.x + this.ball.radius < this.cnv.width/2) {
-            console.log("user")
-            this.player = this.user;
-        } else {
-            this.player = this.computer;
-            console.log("computer")
-    }
+        user = this.user;
+        
         this.ball.top = this.ball.y - this.ball.radius;
         this.ball.bottom = this.ball.y + this.ball.radius;
         this.ball.right = this.ball.x + this.ball.radius;
         this.ball.left = this.ball.x - this.ball.radius;
     
-        this.player.top = this.player.y;
-        this.player.bottom = this.player.y + this.player.height;
-        this.player.left = this.player.x;
-        this.player.right = this.player.x + this.player.width;
+        this.user.top = this.user.y;
+        this.user.bottom = this.user.y + this.user.height;
+        this.user.left = this.user.x;
+        this.user.right = this.user.x + this.user.width;
     
-        return this.ball.right > this.player.left && this.ball.bottom > this.player.top && this.ball.left < 
-        this.player.right && this.ball.top < this.player.bottom;
+        return this.ball.right > this.user.left && this.ball.bottom > this.user.top && this.ball.left < this.user.right; 
     }
-
-    resetBall() {
-        this.ball.x = this.cnv.width/2;
-        this.ball.y = this.cnv.height/2;
-    
-        this.ball.speed = 5;
-        this.ball.velocityX = -this.ball.velocityX;
-    }
+// take from here
 
     updateGame(){   
         // update the score
