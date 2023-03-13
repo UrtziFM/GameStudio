@@ -22,5 +22,6 @@ class Game {
         this.fx.drawBall();
         this.fx.userPaddle();
         this.fx.drawBricks();
+        this.fx.collisionDetection();
     }
 }
