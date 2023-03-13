@@ -19,10 +19,9 @@ class Game {
     render() {
         this.fx.fillCanvas("black");
         this.fx.userScore();
-        this.fx.computerScore();
-        this.fx.drawNet();
         this.fx.drawBall();
         this.fx.userPaddle();
-        this.fx.computerPaddle();
+        this.fx.drawBricks();
+        this.fx.collisionDetection();
     }
 }

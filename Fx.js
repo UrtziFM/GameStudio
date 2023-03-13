@@ -4,10 +4,16 @@ class Fx {
         this.cnv = null;
         this.ctx = null;
         this.user = null;
-        this.computer = null;
-        this.net = null;
         this.ball = null;
-        this.player = null;
+        this.brickRowCount = null;
+        this.brickColumnCount = null;
+        this.brickWidth = null;
+        this.brickHeight = null;
+        this.brickPadding = null;
+        this.brickOffsetTop = null;
+        this.brickOffsetLeft = null;
+        this.bricks = [];
+        this.score = null;
     }
 
     init(){
@@ -15,37 +21,38 @@ class Fx {
         this.ctx = this.cnv.getContext("2d");
         window.addEventListener("mousemove", (e)=> {this.movePaddle(e)});
         this.user = {
-            x: 0, //left side of canvas
-            y: (this.cnv.height - 100)/2,
-            width: 15,
-            height: 100,
+            x: (this.cnv.width - 60)/2, //in the middle of the screen
+            y: this.cnv.height - 30, // on the bottom of the screen
+            width: 120,
+            height: 20,
             color: "WHITE",
-            score: 0
-        }
-        this.computer = {
-            x: this.cnv.width - 15, //right side of canvas
-            y: (this.cnv.height - 100)/2,
-            width: 15,
-            height: 100,
-            color: "WHITE",
-            score: 0
-        }
-        this.net = {
-            x: (this.cnv.width - 2)/2, //in the middle of canvas
-            y: 0,
-            width: 2,
-            height: 10,
-            color: "WHITE"
+            score: 50
         }
         this.ball = {
             x: this.cnv.width/2,
             y: this.cnv.height/2,
-            radius: 15,
+            radius: 12,
             speed: 5,
             velocityX: 5,
             velocityY: 5,
             color: "WHITE"
         }
+        this.brickRowCount = 5;
+        this.brickColumnCount = 10;
+        this.brickWidth = 100;
+        this.brickHeight = 30;
+        this.brickPadding = 5;
+        this.brickOffsetTop = 60;
+        this.brickOffsetLeft = 200;
+        // The matrix for bricks
+        this.bricks = [];
+        for(this.c=0; this.c<this.brickColumnCount; this.c++) {
+            this.bricks[this.c] = [];
+            for(this.r=0; this.r<this.brickRowCount; this.r++) {
+                this.bricks[this.c][this.r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+        this.score = 50;
 }
 
     fillCanvas(color){
@@ -65,11 +72,7 @@ class Fx {
     movePaddle(e) {
         this.rect = this.cnv.getBoundingClientRect();
     
-        this.user.y = e.clientY - this.rect.top - this.user.height/2;
-    }
-
-    computerPaddle(){
-        this.drawRect(this.computer.x, this.computer.y, this.computer.width, this.computer.height, this.computer.color);
+        this.user.x = e.clientX - this.rect.top - this.user.width/2;
     }
 
     drawCircle(x,y,r,color) {
@@ -84,108 +87,108 @@ class Fx {
         this.drawCircle(this.ball.x, this.ball.y, this.ball.radius, this.ball.color);
     }
 
-    drawText(text,x,y,color) {
-        this.ctx.fillStyle = color;
-        this.ctx.font = "100px fantasy";
-        this.ctx.fillText(text,x,y);
-    }
-
     userScore(){
-        this.drawText(this.user.score,this.cnv.width/3,this.cnv.height/8, "WHITE");
-        if(this.user.score == 3){
-            window.gui.winGame();
-            return;
+        this.ctx.font = "20px Arial";
+        this.ctx.fillStyle = "WHITE";
+        this.ctx.fillText("Bricks: "+this.score, this.cnv.width/40, this.cnv.height/25);
+    }
+
+    // Draw the bricks (C: Col R: Row )
+    drawBricks() {
+        for(this.c=0; this.c<this.brickColumnCount; this.c++) {
+            for(this.r=0; this.r<this.brickRowCount; this.r++) {
+                if(this.bricks[this.c][this.r].status == 1) {
+                    this.brickX = (this.c*(this.brickWidth+this.brickPadding))+this.brickOffsetLeft;
+                    this.brickY = (this.r*(this.brickHeight+this.brickPadding))+this.brickOffsetTop;
+                    this.bricks[this.c][this.r].x = this.brickX;
+                    this.bricks[this.c][this.r].y = this.brickY;
+                    this.ctx.beginPath();
+                    this.ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
+                    this.ctx.fillStyle = "WHITE";
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+            }
         }
     }
 
-    computerScore(){
-        this.drawText(this.computer.score,1.85*this.cnv.width/3,this.cnv.height/8, "WHITE");
-        if(this.computer.score == 3){
-            window.gui.stopGame();
-            return;
-        }
-    }
-
-    drawNet(){
-        for (let i =0; i <=this.cnv.height; i+=15){
-            this.drawRect(this.net.x, this.net.y + i, this.net.width, this.net.height, this.net.color);
-        }
-    }
-
-    collision(ball, player){
+    collision(ball, user){
         ball = this.ball;
-        player = this.player;
-        if(this.ball.x + this.ball.radius < this.cnv.width/2) {
-            console.log("user")
-            this.player = this.user;
-        } else {
-            this.player = this.computer;
-            console.log("computer")
-    }
+        user = this.user;
+        
         this.ball.top = this.ball.y - this.ball.radius;
         this.ball.bottom = this.ball.y + this.ball.radius;
         this.ball.right = this.ball.x + this.ball.radius;
         this.ball.left = this.ball.x - this.ball.radius;
     
-        this.player.top = this.player.y;
-        this.player.bottom = this.player.y + this.player.height;
-        this.player.left = this.player.x;
-        this.player.right = this.player.x + this.player.width;
+        this.user.top = this.user.y;
+        this.user.bottom = this.user.y + this.user.height;
+        this.user.left = this.user.x;
+        this.user.right = this.user.x + this.user.width;
     
-        return this.ball.right > this.player.left && this.ball.bottom > this.player.top && this.ball.left < 
-        this.player.right && this.ball.top < this.player.bottom;
+        return this.ball.right > this.user.left && this.ball.bottom > this.user.top && this.ball.left < this.user.right; 
     }
 
-    resetBall() {
-        this.ball.x = this.cnv.width/2;
-        this.ball.y = this.cnv.height/2;
-    
-        this.ball.speed = 5;
-        this.ball.velocityX = -this.ball.velocityX;
+    collisionDetection() {
+        for(this.c=0; this.c<this.brickColumnCount; this.c++) {
+            for(this.r=0; this.r<this.brickRowCount; this.r++) {
+                this.b = this.bricks[this.c][this.r];
+                if(this.b.status == 1){
+                    if(this.ball.x > this.b.x && this.ball.x < this.b.x+this.brickWidth && this.ball.y > this.b.y && this.ball.y <
+                        this.b.y+this.brickHeight) {
+                        this.ball.velocityY = -this.ball.velocityY;
+                        this.b.status = 0;
+                        this.score--;
+                        if(this.score == 0) {
+                            // draw Win when all the bricks are down
+                            this.ball.x = -10;
+                            this.ball.y = -10;
+                            this.ball.speed = 0;
+                            window.gui.winGame();
+                            return;               
+                        }        
+                    }
+                }
+            }
+        }
     }
 
     updateGame(){   
-        // update the score
-        if(this.ball.x - this.ball.radius < 0){
-        // the computer win
-            this.computer.score++;
-            this.resetBall();
-        }else if(this.ball.x + this.ball.radius > this.cnv.width){
-        // the user win
-            this.user.score++;
-            this.resetBall();
-        }
-    
-        // the ball has a velocity
+       
+        // the ball velocity
         this.ball.x += this.ball.velocityX;
         this.ball.y += this.ball.velocityY;
-    
-        // Simple AI to control the computer paddle
-        this.computerLevel = 0.1;
-        this.computer.y += (this.ball.y - (this.computer.y + this.computer.height/2))*this.computerLevel;
-    
-    
-        if(this.ball.y + this.ball.radius > this.cnv.height || this.ball.y - this.ball.radius < 0){
+
+        // collision with canvas walls
+
+        if(this.ball.y - this.ball.radius < 0){ // downside of canvas doesn't have collision wall
             this.ball.velocityY = -this.ball.velocityY;
+        } else if(this.ball.y + this.ball.radius > this.cnv.height){
+            // draw Game Over when the ball hit dowside
+            window.gui.stopGame();
+            return; 
+            
+        }
+        if(this.ball.x + this.ball.radius > this.cnv.width || this.ball.x - this.ball.radius < 0){
+            this.ball.velocityX = -this.ball.velocityX;
         }
 
-    
-        if(this.collision()){
 
+        if(this.collision()){
             // where the ball hit the player
-            this.collidePoint = this.ball.y - (this.player.y + this.player.height/2);
+            this.collidePoint = this.ball.x - (this.user.x + this.user.width/2);
             // normalization 
-            this.collidePoint = this.collidePoint/(this.player.height/2);
+            this.collidePoint = this.collidePoint/(this.user.width/2);
             // calculate angle in Radians 
             this.angleRad = this.collidePoint * (Math.PI/4);
-            // X direction of the ball its hit 
-            this.direction = (this.ball.x + this.ball.radius < this.cnv.width/2) ? 1 : -1;
-    
+            // Y direction of the ball its hit 
+            this.direction = (this.ball.y + this.ball.radius < this.cnv.height/2) ? 1 : -1;
+
             //change velocity X and Y 
-            this.ball.velocityX = this.direction * this.ball.speed * Math.cos(this.angleRad);
-            this.ball.velocityY = this.direction * this.ball.speed * Math.sin(this.angleRad);
+            this.ball.velocityX = this.direction * this.ball.speed * Math.sin(this.angleRad);
+            this.ball.velocityY = this.direction * this.ball.speed * Math.cos(this.angleRad);
             // every time the ball hit the paddle increase its speed
-            this.ball.speed += 0.3;
+            this.ball.speed += 0.2;
+            }
         }
-    }
 }
