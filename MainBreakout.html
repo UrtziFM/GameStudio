@@ -3,13 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pong Game</title>
-        <script src="Fx.js" charset="utf-8"></script>
-        <script src="Gameloop.js" charset="utf-8"></script>
-        <script src="Game.js" charset="utf-8"></script>
-        <script src="Gui.js" charset="utf-8"></script>
-        <script src="App.js" charset="utf-8"></script>
-        <link rel="stylesheet" href="Styles.css"> 
+        <title>GameStudio</title>
+        <script src="BreakoutJS/Fx.js" charset="utf-8"></script>
+        <script src="BreakoutJS/Gameloop.js" charset="utf-8"></script>
+        <script src="BreakoutJS/Game.js" charset="utf-8"></script>
+        <script src="BreakoutJS/Gui.js" charset="utf-8"></script>
+        <script src="BreakoutJS/App.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="BreakoutCSS/Styles.css">
     </head>
     <body>
         <canvas id="canvas" style="display: none"></canvas>
@@ -25,10 +25,12 @@
         <div id="end" class="screen" style="display: none">
             <img src="assets/gameOverBreakout.png"/>
             <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
         </div>
         <div id="win" class="screen" style="display: none">
             <img src="assets/gameWinBreakout.png"/>
             <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
         </div>
     </body>
     <footer>

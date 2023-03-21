@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang ="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GameStudio</title>
+        <script src="PongJS/Fx.js" charset="utf-8"></script>
+        <script src="PongJS/Game.js" charset="utf-8"></script>
+        <script src="PongJS/Gameloop.js" charset="utf-8"></script>
+        <script src="PongJS/Gui.js" charset="utf-8"></script>
+        <script src="PongJS/App.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="PongCSS/Styles.css"> 
+    </head>
+    <body>
+        <canvas id="canvas" style="display: none"></canvas>
+        <div id="load" class="screen" style="display: block">
+            Loading, please wait...
+        </div>
+        <div id="start" class="screen" style="display: none">
+            <img src="assets/gameOnPong.png"/>
+            <div class="startScreen"><u>Instructions:</u><br>·Break all the bricks to defeat UrtziAI<br>·Use your cursor to move the paddle
+            <br>·Be accurate but be fast too</div>
+            <button onclick="window.gui.startGame()">Let's play my friend!</button>
+        </div>
+        <div id="end" class="screen" style="display: none">
+            <img src="assets/gameOverPong.jpeg"/>
+            <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
+        </div>
+        <div id="win" class="screen" style="display: none">
+            <img src="assets/gameWinPong.png"/>
+            <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
+        </div>
+    </body>
+    <footer>
+        <div>
+          <small>Copyright &copy; Urtzi Arana Santamaria</small>
+        </div>
+    </footer>
+</html>
