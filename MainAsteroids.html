@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang ="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GameStudio</title>
+        <script src="AsteroidsJS/Asteroids.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Fx.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Game.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Gameloop.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Gui.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Keyhandler.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Particle.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Player.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/Projectile.js" charset="utf-8"></script>
+        <script src="AsteroidsJS/App.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="AsteroidsCSS/Styles.css">
+    </head>
+    <body>
+        <canvas id="canvas" style="display: none"></canvas>
+        <div id="load" class="screen" style="display: block">
+            Loading, please wait...
+        </div>
+        <div id="start" class="screen" style="display: none">
+            <img src="assets/starwars-start-splash.png"/>
+            <div class="startScreen"><u>Instructions:</u><br>·Break all the bricks to defeat UrtziAI<br>·Use your cursor to move the paddle
+            <br>·Be accurate but be fast too</div>
+            <button onclick="window.gui.startGame()">Let's play my friend!</button>
+        </div>
+        <div id="end" class="screen" style="display: none">
+            <img src="assets/asteroids-gameover-splash.png">
+            <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
+        </div>
+        <div id="win" class="screen" style="display: none">
+            <img src="assets/asteroids-gamewin-splash.png"/>
+            <button onclick="window.gui.startGame()">Let's play again!</button>
+            <a href="https://www.urtziarana.com" class="buttonStudio">Try another game!</a>
+        </div>
+    </body>
+    <footer>
+        <div>
+          <small>Copyright &copy; Urtzi Arana Santamaria</small>
+        </div>
+    </footer>
+</html>
