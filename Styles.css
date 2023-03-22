@@ -1,0 +1,69 @@
+.Introduction {
+    height: 40vh;
+}
+
+.card-group {
+    height: 50vh;
+}
+.card {
+    height: 100%;
+    width: 33%;
+}
+.card-img-top {
+    width: 100%;
+    height: 40%;
+}
+
+.card-body-pong {
+    width: 100%;
+    height: 60%;
+    padding: 25px;
+    text-align: center;
+    background-color: rgb(134, 85, 0);
+}
+
+.card-body-breakout {
+    width: 100%;
+    height: 60%;
+    padding: 25px;
+    text-align: center;
+    background-color: rgb(150, 150, 0);
+}
+
+.card-body-starwars {
+    width: 100%;
+    height: 60%;
+    padding: 25px;
+    text-align: center;
+    background-color: rgb(0, 78, 0);
+}
+
+p {
+    color: white;
+}
+
+.buttonStudio {
+    padding: 0.5em 1em;
+    font-weight: bold;
+    color: white;
+    border: 3px solid white;
+    text-decoration: none;
+}
+
+.card-title {
+    color: white;
+}
+
+.card-text {
+    margin: 15px;
+}
+
+.card-company {
+    margin: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+footer {
+    background-color: black;
+}
