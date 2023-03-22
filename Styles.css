@@ -1,9 +1,19 @@
 .Introduction {
+    height: 51vh;
+    background-color: black;
+}
+
+.Intro-logo {
     height: 40vh;
+    width: 80vh;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .card-group {
-    height: 50vh;
+    height: 39vh;
 }
 .card {
     height: 100%;
@@ -19,7 +29,7 @@
     height: 60%;
     padding: 25px;
     text-align: center;
-    background-color: rgb(134, 85, 0);
+    background-color: rgb(111, 0, 130);
 }
 
 .card-body-breakout {
@@ -40,6 +50,7 @@
 
 p {
     color: white;
+    font-size: 0.75em;
 }
 
 .buttonStudio {
@@ -59,11 +70,7 @@ p {
 }
 
 .card-company {
-    margin: 10px;
+    margin: 5px;
     font-weight: bold;
     color: white;
-}
-
-footer {
-    background-color: black;
 }
